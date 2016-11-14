@@ -111,6 +111,7 @@ def uploaded_file(name):
 def file_post():
     import pdb; pdb.set_trace()
     file = request.files.get("file")
+    #print (request)
     if not file:
         data = {"message": "Could not find file data"}
         return Response(json.dumps(data), 422, mimetype="application/json")

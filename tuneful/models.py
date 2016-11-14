@@ -1,20 +1,17 @@
 import os.path
 
-from flask import url_for
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
-from sqlalchemy.orm import relationship
+
+
 
 from tuneful import app
-from .database import Base, engine
+from .database import Base, engine, session
 
-import os.path
+
 
 from flask import url_for
 from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
 from sqlalchemy.orm import backref, relationship
 
-from tuneful import app
-from .database import Base, engine
 
 class Song(Base):
     __tablename__ = 'songs'
@@ -24,10 +21,16 @@ class Song(Base):
     
 
     def as_dictionary(self):
-        return {
+        songfile = session.query(File).get(self.file_id)
+        song = {
             'id': self.id,
-            'file_id': self.file_id,
+            'file': {
+                'id': songfile.id,
+                'name': songfile.name
+                }
+        
         }
+        return song
 
 
 class File(Base):
