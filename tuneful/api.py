@@ -109,14 +109,14 @@ def uploaded_file(name):
 @decorators.require("multipart/form-data")
 @decorators.accept("application/json")
 def file_post():
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     file = request.files.get("file")
     #print (request)
     if not file:
         data = {"message": "Could not find file data"}
         return Response(json.dumps(data), 422, mimetype="application/json")
 
-    filename = secure_filename(file.name)
+    filename = secure_filename(file.filename)
     db_file = models.File(name=filename)
     session.add(db_file)
     session.commit()
