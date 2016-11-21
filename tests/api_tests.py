@@ -40,12 +40,20 @@ class TestAPI(unittest.TestCase):
 
     def test_get_songs(self):
         fileA = models.File(name='fileA.mp3')
-        songA = models.Song(file_id=fileA.id)
-        fileB = models.File(name='fileB.mp3')
-        songB = models.Song(file_id=fileB.id)
-
-        session.add_all([fileA, fileB, songA, songB])
+        session.add(fileA)
         session.commit()
+        songA = models.Song(file_id=fileA.id)
+        session.add(songA)
+        session.commit()
+        fileB = models.File(name='fileB.mp3')
+        session.add(fileB)
+        session.commit()
+        songB = models.Song(file_id=fileB.id)
+        session.add(songB)
+        session.commit()
+
+        
+        
 
         response = self.client.get(
             '/api/songs',
@@ -59,10 +67,10 @@ class TestAPI(unittest.TestCase):
 
         SongA, SongB = data
         self.assertEqual(SongA['id'], songA.id)
-        self.assertEqual(SongA['file_id'], songA.file_id)
+        self.assertEqual(SongA['file']['id'], songA.file_id)
         
         self.assertEqual(SongB['id'], songB.id)
-        self.assertEqual(SongB['file_id'], songB.file_id)
+        self.assertEqual(SongB['file']['id'], songB.file_id)
         
 
     
